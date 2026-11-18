@@ -1,0 +1,10 @@
+# DVAPI Security Assessment Report
+
+This folder contains the API security assessment report for the Damn Vulnerable API (DVAPI) lab.
+
+The report documents:
+- OWASP API Security Top 10 (2023) testing
+- Vulnerability identification
+- Proof-of-concept demonstrations
+- Burp Suite testing evidence
+- Security impact and remediation recommendations
