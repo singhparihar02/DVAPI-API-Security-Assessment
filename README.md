@@ -41,48 +41,46 @@ The assessment covered the following OWASP API Security Top 10 categories:
 
 ## Authentication Flow
 
-The DVAPI application uses token-based authentication with JSON Web Tokens (JWT) to authenticate users and access protected API endpoints.
+The DVAPI lab uses JSON Web Tokens (JWT) for authentication. The following flow is based on the publicly available DVAPI application source code and was used to understand the lab's authentication behavior.
 
 ### Authentication Process
 
-The authentication workflow involves the following steps:
+1. **Registration:** A user submits registration details to `POST /api/register`. The application creates a user record.
+2. **Login:** A user submits a username and password to `POST /api/login`.
+3. **Credential Check:** The application looks up a user by matching the submitted username and password against the stored user record. The implementation compares password values directly rather than using password hashing.
+4. **JWT Creation:** After successful login, the application creates a JWT containing the user's identifier, username, and role-related claim. The token is signed using the application's configured signing secret.
+5. **Token Delivery:** The login response provides the JWT in the `Authorization` response header and also sets it in an `auth` cookie.
+6. **Protected API Requests:** API routes use Bearer-token authentication. The client sends the token in the request's `Authorization: Bearer <token>` header, and middleware verifies the token before continuing to the protected route.
+7. **Web Page Authentication:** Page routes use the `auth` cookie for authentication rather than the Bearer-token header.
 
-1. **User Registration:** Users submit registration credentials through the `/api/register` endpoint.
-2. **User Login:** Users authenticate using their username and password through the `/api/login` endpoint.
-3. **Token Generation:** Following successful authentication, the application issues a JWT.
-4. **Token-Based Access:** The JWT is used as a Bearer token in the HTTP Authorization header when accessing protected endpoints.
-5. **Token Validation:** The application validates the authentication token before processing protected requests.
+### Authentication Weaknesses Identified in the Lab Implementation
 
-### JWT Authentication
+The source code exposes several insecure implementation choices relevant to the assessment:
 
-JWT authentication was examined to understand how authentication tokens are generated, transmitted, and validated.
+- A weak, hard-coded JWT signing secret is used.
+- Passwords are compared directly with stored values instead of being verified using a secure password-hashing function.
+- The `auth` cookie is configured with `httpOnly: false`.
+- The JWT signing call does not set an explicit token expiration.
+- The application uses the same signing secret for JWT signing and verification.
 
-The assessment focused on:
-
-- JWT structure and token analysis.
-- Weak JWT signing secret.
-- JWT signature security.
-- Token forgery possibilities.
-- Authentication and authorization weaknesses.
+These weaknesses help explain the authentication and token-forgery testing documented in the assessment. This section describes the intentionally vulnerable lab implementation; it is not a recommendation for production authentication design.
 
 ### Security Testing
 
 Authentication-related testing was performed using:
 
 - **Postman:** Sending login requests and testing authenticated API endpoints.
-- **Burp Suite:** Intercepting and manipulating authentication requests and JWT tokens.
+- **Burp Suite:** Intercepting and modifying authentication requests and JWTs.
 - **JWT.io:** Inspecting JWT headers, payloads, and signatures.
 
-### Security Considerations
+### Security Recommendations
 
-Recommended security measures include:
-
-- Using strong, randomly generated JWT signing secrets.
-- Secure password hashing.
-- Proper JWT signature verification.
-- Enforcing token expiration.
-- Restricting accepted signing algorithms.
-- Implementing appropriate authentication and authorization controls.
+- Store passwords using a strong, salted password-hashing algorithm such as Argon2id or bcrypt.
+- Use a strong, randomly generated signing secret stored outside the source code.
+- Set and validate appropriate JWT expiration and claims.
+- Restrict accepted signing algorithms and verify JWT signatures securely.
+- Set authentication cookies with `HttpOnly`, `Secure`, and an appropriate `SameSite` policy.
+- Enforce authorization checks independently on every protected resource and action.
 ## Methodology
 
 The assessment followed a practical API penetration-testing workflow:
@@ -97,10 +95,17 @@ The assessment followed a practical API penetration-testing workflow:
 
 ## Repository Contents
 
-- **Assessment-Report/** – Detailed API security assessment report.
-- **Screenshots/** – Burp Suite testing evidence and vulnerability screenshots.
-- **Postman/** – Exported Postman API collection.
-- **Methodology/** – Testing methodology and supporting documentation.
+```text
+.
+├── Assessment-Report/
+│   └── DVAPI-Security-Assessment-Report.pdf
+├── Postman/
+│   ├── DVAPI-API-Security-Testing.postman_collection.json
+│   └── README.md
+└── README.md
+```
+
+The repository currently contains the assessment report and exported Postman collection shown above.
 
 ## Lab Environment
 
