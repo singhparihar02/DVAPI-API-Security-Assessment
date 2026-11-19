@@ -90,3 +90,12 @@ http://localhost:3000
 This project was conducted for educational purposes in an intentionally vulnerable local lab environment. All testing was performed against the DVAPI lab application.
 
 **This project is intended for cybersecurity learning and authorised security testing only.**
+## Project Resources
+
+### Assessment Report
+[View DVAPI Security Assessment Report (PDF)](Assessment-Report/DVAPI-Security-Assessment-Report.pdf)
+
+### Postman Collection
+[Download DVAPI Postman Collection](Postman/DVAPI-API-Security-Testing.postman_collection.json)
+
+The Postman collection contains API requests used during the security assessment.
