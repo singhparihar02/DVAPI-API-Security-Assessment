@@ -39,6 +39,50 @@ The assessment covered the following OWASP API Security Top 10 categories:
 | API9: Improper Inventory Management | Access to unreleased challenges |
 | API10: Unsafe Consumption of APIs | NoSQL injection testing |
 
+## Authentication Flow
+
+The DVAPI application uses token-based authentication with JSON Web Tokens (JWT) to authenticate users and access protected API endpoints.
+
+### Authentication Process
+
+The authentication workflow involves the following steps:
+
+1. **User Registration:** Users submit registration credentials through the `/api/register` endpoint.
+2. **User Login:** Users authenticate using their username and password through the `/api/login` endpoint.
+3. **Token Generation:** Following successful authentication, the application issues a JWT.
+4. **Token-Based Access:** The JWT is used as a Bearer token in the HTTP Authorization header when accessing protected endpoints.
+5. **Token Validation:** The application validates the authentication token before processing protected requests.
+
+### JWT Authentication
+
+JWT authentication was examined to understand how authentication tokens are generated, transmitted, and validated.
+
+The assessment focused on:
+
+- JWT structure and token analysis.
+- Weak JWT signing secret.
+- JWT signature security.
+- Token forgery possibilities.
+- Authentication and authorization weaknesses.
+
+### Security Testing
+
+Authentication-related testing was performed using:
+
+- **Postman:** Sending login requests and testing authenticated API endpoints.
+- **Burp Suite:** Intercepting and manipulating authentication requests and JWT tokens.
+- **JWT.io:** Inspecting JWT headers, payloads, and signatures.
+
+### Security Considerations
+
+Recommended security measures include:
+
+- Using strong, randomly generated JWT signing secrets.
+- Secure password hashing.
+- Proper JWT signature verification.
+- Enforcing token expiration.
+- Restricting accepted signing algorithms.
+- Implementing appropriate authentication and authorization controls.
 ## Methodology
 
 The assessment followed a practical API penetration-testing workflow:
