@@ -81,6 +81,7 @@ Authentication-related testing was performed using:
 - Restrict accepted signing algorithms and verify JWT signatures securely.
 - Set authentication cookies with `HttpOnly`, `Secure`, and an appropriate `SameSite` policy.
 - Enforce authorization checks independently on every protected resource and action.
+
 ## Methodology
 
 The assessment followed a practical API penetration-testing workflow:
@@ -139,6 +140,7 @@ http://localhost:3000
 This project was conducted for educational purposes in an intentionally vulnerable local lab environment. All testing was performed against the DVAPI lab application.
 
 **This project is intended for cybersecurity learning and authorised security testing only.**
+
 ## Project Resources
 
 ### Assessment Report
